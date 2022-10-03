@@ -17,7 +17,7 @@ function Encode($text , $key = null){
         "encoded" => ""
     );
 
-    if($key == null) $re['key'] = Random_String(45 - strlen($text));
+    if($key == null) $re['key'] = Random_String(20);
     else $re['key'] = $key;
 
     $tmp = str_split($re["key"]) + str_split($text);
