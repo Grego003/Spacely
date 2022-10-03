@@ -17,7 +17,7 @@ function Encode($text , $key = null){
         "encoded" => ""
     );
 
-    if($key == null) $re['key'] = Random_String(strlen($text));
+    if($key == null) $re['key'] = Random_String(45 - strlen($text));
     else $re['key'] = $key;
 
     $tmp = str_split($re["key"]) + str_split($text);
@@ -40,7 +40,7 @@ function Encode($text , $key = null){
         $re["encoded"] .= $tmp[$i];
     }
     return $re;
-};
+}
 
 function CheckEncode($text, $key, $encoded) {
     global $AlpStr;
