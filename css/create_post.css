@@ -1,0 +1,54 @@
+/* font */
+@import url("https://fonts.googleapis.com/css2?family=Contrail+One&family=Dancing+Script&family=Noto+Sans+Mono:wght@700&family=Poppins:wght@200;400;700&display=swap");
+
+:root {
+  --font-size: 1rem;
+
+  --primary01: #d83f87;
+  --primary02: #2a1b3d;
+  --primary03: #44318d;
+  --secondary01: #e98074;
+  --secondary02: #a4b3b6;
+  --secondary03: #e0fbfc;
+  --accent01: #e63946;
+  --accent02: #fbc531;
+}
+
+input[type="radio"] {
+  appearance: none;
+  background-color: var(--accent02);
+  margin: 0;
+
+  font: inherit;
+  color: var(--accent01);
+  width: 1.15em;
+  height: 1.15em;
+  border: 0.15em solid var(--primary02);
+  border-radius: 50%;
+  transform: translateY(0.25em);
+  display: grid;
+  place-content: center;
+}
+
+input[type="radio"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em var(--primary01);
+}
+
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="radio"]:focus {
+  outline: max(2px, 0.15em) solid var(--primary01);
+  outline-offset: max(2px, 0.15em);
+}
+
+.form-check-label {
+  font-family: "Noto Sans Mono";
+}

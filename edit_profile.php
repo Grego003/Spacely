@@ -67,7 +67,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
     <main>
         <div class="container card profile-container d-flex flex-row mt-4 justify-content-evenly align-items-center">
             <div class="profile-bio d-flex flex-column col-lg-3 ms-3 py-3 justify-content-center align-items-center">
-                <img src=<?= "user_img/" . $row["img"] ?> style="max-width: 12rem;">
+                <img src=<?= "user_img/" . $row["img"] ?> style="max-width: 10rem;" class="rounded-circle my-2">
                 <h3><?= $row["username"] ?></h3>
                 <span class="my-1"><?= $row["email"] ?></span>
             </div>
@@ -82,9 +82,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                                 <input type="email" class="form-control" id="email" name="email" require />
                                 <label for="password" class="form-label mt-2 mb-2"> Upload Profile Picture </label>
                                 <input type="file" class="form-control" id="img" name="img" require />
-                                <div class="button-container mt-3 mb-4 text-center">
-                                    <a href="edit_profile_proses.php"><button class="edit-profile btn btn-success my-2" style="max-width: 8rem;">Save Profile</button></a>
-                                    <a href="profile.php"><button class="edit-profile btn btn-danger my-2" style="max-width: 8rem;">Back</button></a>
+                                <div class="button-container mt-3 mb-4">
+                                    <a href="edit_profile_proses.php"><button class="edit-profile btn btn-success my-2 p-2 me-1" style="max-width: 8rem;">Save Profile</button></a>
+                                    <a href="profile.php"><button class="edit-profile btn btn-danger my-2 p-2 px-3 me-1" style="max-width: 8rem;">Back</button></a>
                                 </div>
                             </div>
                         </div>

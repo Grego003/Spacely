@@ -15,9 +15,20 @@
 }
 
 .edit-profile {
-  max-width: 25%;
+  font-family: "Noto Sans Mono";
+  font-size: 15px;
+  text-transform: uppercase;
 }
 
-.profile-container {
-  box-shadow: 0 7px 30px -10px rgba(150, 170, 180, 0.5);
+.post-body-content {
+  display: block;
+  height: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: wrap;
+}
+
+.pembatas-post {
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  border-radius: 2px;
 }

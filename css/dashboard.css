@@ -1,5 +1,5 @@
 /* font */
-@import url("https://fonts.googleapis.com/css2?family=Contrail+One&family=Dancing+Script&family=Noto+Sans+Mono:wght@700&family=Poppins:wght@200;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Contrail+One&family=Dancing+Script&family=Noto+Sans+Mono:wght@700&family=Poppins:wght@200;400;700&family=Racing+Sans+One&display=swap");
 
 :root {
   --font-size: 1rem;
@@ -40,8 +40,8 @@ html {
   margin: auto;
 }
 
-.jumbotron .jumboDesc span {
-  font-family: "Contrail One", cursive;
+.jumbotron .jumboDesc h1 span {
+  font-family: "Noto Sans Mono";
   font-size: 3.5rem;
   letter-spacing: 2px;
   margin-left: 6px;

@@ -43,11 +43,11 @@ if (isset($_SESSION['ERROR'])) {
                 <div class="row form-group">
                     <div class="col">
                         <label for="username" class="form-label mt-4 mb-2"> Username </label>
-                        <input type="text" class="form-control" id="username" name="username" require />
+                        <input type="text" class="form-control" id="username" name="username" required />
                         <label for="password" class="form-label mt-2 mb-2"> Password </label>
-                        <input type="password" class="form-control" id="password" name="password" require />
+                        <input type="password" class="form-control" id="password" name="password" required />
                         <div class="button-container mt-3 mb-4 text-center">
-                            <button type="submit" class="mt-2 mb-2 btn btn-danger" name="login" require>login</button>
+                            <button type="submit" class="mt-2 mb-2 btn btn-danger" name="login" required>login</button>
                         </div>
                     </div>
                 </div>

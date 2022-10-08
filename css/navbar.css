@@ -29,6 +29,6 @@
   opacity: 0.75;
 }
 
-.navbar .navbar-nav .active>.nav-link {
+.navbar .navbar-nav .active > .nav-link {
   color: var(--accent02);
 }
