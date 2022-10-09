@@ -2,117 +2,127 @@
 @import url("https://fonts.googleapis.com/css2?family=Contrail+One&family=Dancing+Script&family=Noto+Sans+Mono:wght@700&family=Poppins:wght@200;400;700&display=swap");
 
 :root {
-  --font-size: 1rem;
+    --font-size: 1rem;
 
-  --primary01: #d83f87;
-  --primary02: #2a1b3d;
-  --primary03: #44318d;
-  --secondary01: #e98074;
-  --secondary02: #a4b3b6;
-  --secondary03: #e0fbfc;
-  --accent01: #e63946;
-  --accent02: #fbc531;
+    --primary01: #d83f87;
+    --primary02: #2a1b3d;
+    --primary03: #44318d;
+    --secondary01: #e98074;
+    --secondary02: #a4b3b6;
+    --secondary03: #e0fbfc;
+    --accent01: #e63946;
+    --accent02: #fbc531;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #f1f2f2;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f1f2f2;
 }
 
 html {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 .tabbed {
-  width: 80%;
-  min-width: 400px;
-  margin: 0 auto;
-  margin-bottom: 68px;
-  border-bottom: 4px solid var(--primary03);
-  overflow: hidden;
-  transition: border 250ms ease;
+    width: 80%;
+    min-width: 400px;
+    margin: 0 auto;
+    margin-bottom: 68px;
+    border-bottom: 4px solid var(--primary03);
+    overflow: hidden;
+    transition: border 250ms ease;
 }
+
 .tabbed ul {
-  margin: 0px;
-  padding: 0px;
-  overflow: hidden;
-  float: left;
-  padding-left: 48px;
-  list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+    float: left;
+    padding-left: 48px;
+    list-style-type: none;
 }
+
 .tabbed ul * {
-  margin: 0px;
-  padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
+
 .tabbed ul li {
-  display: block;
-  float: right;
-  padding: 10px 24px 8px;
-  background-color: #fff;
-  margin-right: 46px;
-  z-index: 2;
-  position: relative;
-  cursor: pointer;
-  color: #777;
-  text-transform: uppercase;
-  font: 600 13px/20px "Poppins";
-  transition: all 250ms ease;
+    display: block;
+    float: right;
+    padding: 10px 24px 8px;
+    background-color: #fff;
+    margin-right: 46px;
+    z-index: 2;
+    position: relative;
+    cursor: pointer;
+    color: #777;
+    text-transform: uppercase;
+    font: 600 13px/20px "Poppins";
+    transition: all 250ms ease;
 }
 
 .tabbed ul li img {
-  width: 1.25rem;
-  height: auto;
-  margin-right: 2px;
+    width: 1.25rem;
+    height: auto;
+    margin-right: 2px;
 }
 
 .tabbed ul li:before,
 .tabbed ul li:after {
-  display: block;
-  content: " ";
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 44px;
-  background-color: #fff;
-  transition: all 250ms ease;
+    display: block;
+    content: " ";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 44px;
+    background-color: #fff;
+    transition: all 250ms ease;
 }
+
 .tabbed ul li:before {
-  right: -24px;
-  transform: skew(30deg, 0deg);
-  box-shadow: rgba(0, 0, 0, 0.1) 3px 2px 5px,
-    inset rgba(255, 255, 255, 0.09) -1px 0;
+    right: -24px;
+    transform: skew(30deg, 0deg);
+    box-shadow: rgba(0, 0, 0, 0.1) 3px 2px 5px,
+        inset rgba(255, 255, 255, 0.09) -1px 0;
 }
+
 .tabbed ul li:after {
-  left: -24px;
-  transform: skew(-30deg, 0deg);
-  box-shadow: rgba(0, 0, 0, 0.1) -3px 2px 5px,
-    inset rgba(255, 255, 255, 0.09) 1px 0;
+    left: -24px;
+    transform: skew(-30deg, 0deg);
+    box-shadow: rgba(0, 0, 0, 0.1) -3px 2px 5px,
+        inset rgba(255, 255, 255, 0.09) 1px 0;
 }
+
 .tabbed ul li:hover,
 .tabbed ul li:hover:before,
 .tabbed ul li:hover:after {
-  background-color: #f4f7f9;
-  color: #444;
+    background-color: #f4f7f9;
+    color: #444;
 }
+
 .tabbed ul li.active {
-  z-index: 3;
+    z-index: 3;
 }
+
 .tabbed ul li.active,
 .tabbed ul li.active:before,
 .tabbed ul li.active:after {
-  background-color: var(--primary01);
-  color: #fff;
+    background-color: var(--primary01);
+    color: #fff;
 }
 
 /* Round Tabs */
 .tabbed.round ul li {
-  border-radius: 8px 8px 0 0;
+    border-radius: 8px 8px 0 0;
 }
+
 .tabbed.round ul li:before {
-  border-radius: 0 8px 0 0;
+    border-radius: 0 8px 0 0;
 }
+
 .tabbed.round ul li:after {
-  border-radius: 8px 0 0 0;
+    border-radius: 8px 0 0 0;
 }
