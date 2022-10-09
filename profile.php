@@ -1,21 +1,19 @@
 <?php
 require "NeedLogin.php";
+require "db.php";
 //user data
-$dsn = "mysql:host=localhost;dbname=uts_forum";
-$kunci = new PDO($dsn, "root", "");
 $sql = "SELECT * FROM user
 WHERE id = ?";
-$stmt = $kunci->prepare($sql);
+$stmt = $db->prepare($sql);
 $stmt->execute([$_SESSION["id"]]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 //post history
 $sql2 = "SELECT * FROM post
 WHERE user_id = ?";
-$stmt = $kunci->prepare($sql2);
+$stmt = $db->prepare($sql2);
 $stmt->execute([$_SESSION["id"]]);
-$row2 = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = $stmt->fetchAll();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +58,7 @@ $row2 = $stmt->fetch(PDO::FETCH_ASSOC);
 					<div class="pb-3">
 						<h3>History</h3>
 					</div>
-					<?php if (!$row2) {
+					<?php if (!$result) {
 					?>
 						<div>
 							<h2> You haven't posted anything yet </h2>
@@ -70,63 +68,62 @@ $row2 = $stmt->fetch(PDO::FETCH_ASSOC);
 						</div>
 						<?php
 					} else {
-						while ($row2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
+						foreach ($result as $row2) {
 						?>
 							<div class="profile-posts my-2 mb-3">
-							<span class="mb-3 text-muted" style="font-size: 14px"><?= $row2["date_created"] ?></span>
+								<span class="mb-3 text-muted" style="font-size: 14px"><?= $row2["date_created"] ?></span>
 
-								<div class="w-100 mt-1 d-flex justify-content-between align-items-center p-2 text-white" 
-									style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; background-color:#44318d;">
-										
-								<h5 class="ms-2"><?= $row2["title"] ?></h5>
+								<div class="w-100 mt-1 d-flex justify-content-between align-items-center p-2 text-white" style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-top-left-radius: 6px; border-bottom-left-radius: 6px; background-color:#44318d;">
+
+									<h5 class="ms-2"><?= $row2["title"] ?></h5>
 									<button class="category-button" role="button"><?= get_category($row2["forum_id"]) ?></button>
 								</div>
 								<div class="my-2 d-flex flex-column">
 
-									<a onMouseOver="this.style.backgroundColor='#D9D9D9'" onMouseOut="this.style.backgroundColor='rgba(236,236,236,0.5)'" data-bs-toggle="modal" data-bs-target="#modal<?php echo $row2["id"]?>" class="p-3 rounded" style="cursor: pointer; background-color:rgba(236,236,236,0.5); color: black; text-decoration: none; ">
-									<span class="post-body-content"><?= $row2["body"] ?></span></a>
+									<a onMouseOver="this.style.backgroundColor='#D9D9D9'" onMouseOut="this.style.backgroundColor='rgba(236,236,236,0.5)'" data-bs-toggle="modal" data-bs-target="#modal<?php echo $row2["id"] ?>" class="p-3 rounded" style="cursor: pointer; background-color:rgba(236,236,236,0.5); color: black; text-decoration: none; ">
+										<span class="post-body-content"><?= $row2["body"] ?></span></a>
 
 									<!-- modal to show more text of body -->
-									<div class="modal" id="modal<?php echo $row2["id"]?>" tabindex="-1" role="dialog" aria-labelledby="modallabel1" aria-hidden= "true">
+									<div class="modal" id="modal<?php echo $row2["id"] ?>" tabindex="-1" role="dialog" aria-labelledby="modallabel1" aria-hidden="true">
 										<div class="modal-dialog modal-dialog-centered" role="document">
 											<div class="modal-content p-3">
-											<div class="modal-header">
-												<h5 class="modal-title">Post Body</h5>
+												<div class="modal-header">
+													<h5 class="modal-title">Post Body</h5>
+												</div>
+												<div class="modal-body">
+													<p><?= $row2["body"] ?></p>
+												</div>
 											</div>
-											<div class="modal-body">
-												<p><?= $row2["body"] ?></p>
-											</div>			
-										</div>
 										</div>
 									</div>
-								<!-- close modal-->
-								<div class="feedback-container d-flex flex-row my-3">
-									<div class="border border-3 border-light rounded me-2 p-1">
-										<button disabled class="rounded-circle bg-transparent">
-											<i class="fa-solid fa-thumbs-up"></i>
-										</button>
-									<span class="mx-1"><?= $row2["like_ammount"] ?></span>
-									</div>
+									<!-- close modal-->
+									<div class="feedback-container d-flex flex-row my-3">
+										<div class="border border-3 border-light rounded me-2 p-1">
+											<button disabled class="rounded-circle bg-transparent">
+												<i class="fa-solid fa-thumbs-up"></i>
+											</button>
+											<span class="mx-1"><?= $row2["like_ammount"] ?></span>
+										</div>
 
-									<div class="border border-3 border-light rounded me-2 p-1">
-										<button disabled class="rounded-circle bg-transparent">
-											<i class="fa-solid fa-comment"></i>
-										</button>
-									<span class="mx-1"><?= $row2["comment_ammount"] ?></span>
+										<div class="border border-3 border-light rounded me-2 p-1">
+											<button disabled class="rounded-circle bg-transparent">
+												<i class="fa-solid fa-comment"></i>
+											</button>
+											<span class="mx-1"><?= $row2["comment_ammount"] ?></span>
+										</div>
+
 									</div>
-									
+									<hr class="pembatas-post">
 								</div>
-								<hr class="pembatas-post">
-							</div>
+							<?php } ?>
 						<?php } ?>
-					<?php } ?>
+							</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</main>
+	</main>
 
-<?php include_once './components/footer.php' ?>
+	<?php include_once './components/footer.php' ?>
 
 	<?php
 	function get_category($forum_id)

@@ -38,7 +38,9 @@ if (isset($_SESSION['ERROR'])) {
             <form id="form-create-account" action="create_account_proses.php" method="post" enctype="multipart/form-data">
                 <div class="row form-group">
                     <div class="col">
-                        <label for="username" class="form-label mt-4 mb-2"> Username </label>
+                        <label for="name" class="form-label mt-4 mb-2"> Full Name </label>
+                        <input type="text" class="form-control" id="name" name="name" require />
+                        <label for="username" class="form-label mt-2 mb-2"> Username </label>
                         <input type="text" class="form-control" id="username" name="username" require />
                         <label for="email" class="form-label mt-2 mb-2"> Email </label>
                         <input type="email" class="form-control" id="email" name="email" require />

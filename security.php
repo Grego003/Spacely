@@ -2,10 +2,7 @@
 
 // hidupkan sebelum di kumpul
 //error_reporting(0);
-
-$dsn = "mysql:host=localhost;dbname=uts_forum";
-$kunci = new PDO($dsn, "root", "");
-
+require_once "db.php";
 $blacklist = array(
     '&', ';', '`', '‘',
     "\"", '“', '|', '*', '?',
@@ -60,10 +57,10 @@ function Encode($text, $key = null)
 
 function CheckAccount($_username, $_password)
 {
-    global $kunci;
+    global $db;
     $sql = "SELECT * FROM user
         where username = ?";
-    $stmt = $kunci->prepare($sql);
+    $stmt = $db->prepare($sql);
     $stmt->execute([$_username]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $t = Encode($_password, $row['user_key']);
@@ -131,4 +128,23 @@ function GetImgType($img)
     $file_ext = strtolower($file_ext);
     $file_ext = "." . $file_ext;
     return $file_ext;
+}
+
+function check_img_type($img_type)
+{
+    switch ($img_type) {
+        case 'jpg':
+        case 'png':
+        case 'jpeg':
+        case 'svg':
+        case 'webp':
+        case 'bmp':
+        case 'gif':
+            return true;
+            break;
+        default:
+            $_SESSION['ERROR'] = "YOU CAN ONLY UPLOAD AN IMAGE FILE.";
+            header('location: create_account_form.php');
+            return false;
+    }
 }

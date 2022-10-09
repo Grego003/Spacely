@@ -50,10 +50,6 @@ if (!isset($_SESSION["id"])) {
 				<li class='active'><img src="img/php.svg"> PHP</li>
 			</ul>
 		</div>
-		<div class="container temporary text-center d-flex align-items-center justify-content-center">
-			<a href="create_post_form.php"><button class="category-button" role="button">Add Form</button></a>
-		</div>
-
 		<div class="container my-4 col-lg-8">
 			<?php ?>
 			<div class="card-group vgr-cards">

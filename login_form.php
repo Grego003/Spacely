@@ -1,7 +1,5 @@
 <?php
 session_start();
-session_destroy(); //destroy the old login session 
-session_start(); //start a new session
 $incomplete_msg = "Please fill all required fields and submit again.";
 $alert_msg = $incomplete_msg;
 $style = "display:none;";

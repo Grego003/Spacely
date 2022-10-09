@@ -1,9 +1,10 @@
 <?php
 session_start();
 require_once("security.php");
+var_dump($name);
 
 if (
-    !empty($_POST["username"]) && !empty($_POST["email"]) &&
+    !empty($_POST["name"]) && !empty($_POST["username"]) && !empty($_POST["email"]) &&
     !empty($_POST["password"]) && isset($_FILES['img'])
 ) {
     if (CheckValidString($_POST["email"])) {
@@ -22,7 +23,12 @@ if (
         $_SESSION['ERROR'] = "username must be alphanumeric";
         header('location: create_account_form.php');
     }
+    if (CheckValidString($_POST["name"])) {
+        $_SESSION['ERROR'] = "name must be alphanumeric";
+        header('location: create_account_form.php');
+    }
     $id = "U";
+    $name = $_POST["name"];
     $username = $_POST["username"];
     $email = $_POST["email"];
     $encrypted = Encode($_POST["password"]);
@@ -40,7 +46,7 @@ if (
         // 0 = user, 1 = admin
         $id = GetID(0);
         move_uploaded_file($img_temp, "user_img/{$id}.{$file_ext}");
-        insert_to_database($id, $username, $email, $user_key, $encrypted_password, "{$id}.{$file_ext}");
+        insert_to_database($id, $name, $username, $email, $user_key, $encrypted_password, "{$id}.{$file_ext}");
         header('location: login_form.php');
     }
 } else {
@@ -49,44 +55,25 @@ if (
 }
 
 
-function insert_to_database($_id, $_username, $_email, $_user_key, $_encrypted_password, $_img)
+function insert_to_database($_id, $_name, $_username, $_email, $_user_key, $_encrypted_password, $_img)
 {
     global $blacklist;
-    $sql = "INSERT INTO user(id, username, email, user_key, encrypted_password, img, roles)
+    $sql = "INSERT INTO user(id, name, username, email, user_key, encrypted_password, img)
             VALUES (?, ?, ?, ?, ?, ?, ?)";
-    global $kunci;
-    $stmt = $kunci->prepare($sql);
+    global $db;
+    $stmt = $db->prepare($sql);
     $_username = str_replace($blacklist, "", $_username);
     $_email = str_replace($blacklist, "", $_email);
-    $data = [$_id, $_username, $_email, $_user_key, $_encrypted_password, $_img, 0];
+    $data = [$_id, $_name, $_username, $_email, $_user_key, $_encrypted_password, $_img];
     $stmt->execute($data);
-}
-
-function check_img_type($img_type)
-{
-    switch ($img_type) {
-        case 'jpg':
-        case 'png':
-        case 'jpeg':
-        case 'svg':
-        case 'webp':
-        case 'bmp':
-        case 'gif':
-            return true;
-            break;
-        default:
-            $_SESSION['ERROR'] = "YOU CAN ONLY UPLOAD AN IMAGE FILE.";
-            header('location: create_account_form.php');
-            return false;
-    }
 }
 
 function GetID($type)
 {
     $id = 0;
     $sql = "SELECT * FROM user";
-    global $kunci;
-    $hasil = $kunci->query($sql);
+    global $db;
+    $hasil = $db->query($sql);
     while ($row = $hasil->fetch(PDO::FETCH_ASSOC)) {
         $id = intval($row['id']);
     }

@@ -20,15 +20,15 @@ if (isset($_POST["categories"]) && isset($_POST["title"]) && isset($_POST["body"
     echo $body;
 
     insert_post_to_database($post_id, $user_id, $forum_id, $title, $body, $curr_time, $curr_date);
-    echo "post has been created";
+    header("location: category.php");
 }
 
 function insert_post_to_database($_post_id, $_user_id, $_forum_id, $_title, $_body, $_time_created, $_date_created)
 {
     $sql = "INSERT INTO post(id, user_id, forum_id, title, body, time_created, date_created, like_ammount, comment_ammount)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    global $kunci;
-    $stmt = $kunci->prepare($sql);
+    global $db;
+    $stmt = $db->prepare($sql);
     $data = [$_post_id, $_user_id, $_forum_id, $_title, $_body, $_time_created, $_date_created, 0, 0];
     $stmt->execute($data);
 }
@@ -37,8 +37,8 @@ function Get_PostID()
 {
     $id = 0;
     $sql = "SELECT * FROM post";
-    global $kunci;
-    $hasil = $kunci->query($sql);
+    global $db;
+    $hasil = $db->query($sql);
     while ($row = $hasil->fetch(PDO::FETCH_ASSOC)) {
         $id = intval(substr($row['id'], 1));
     }

@@ -1,11 +1,10 @@
 <?php
 require "NeedLogin.php";
+require "db.php";
 //user data
-$dsn = "mysql:host=localhost;dbname=uts_forum";
-$kunci = new PDO($dsn, "root", "");
 $sql = "SELECT * FROM user
 WHERE id = ?";
-$stmt = $kunci->prepare($sql);
+$stmt = $db->prepare($sql);
 $stmt->execute([$_SESSION["id"]]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
@@ -34,64 +33,41 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <body>
     <!-- navbar -->
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="dashboard.php">
-                <img src="img/SPACELY.svg" width="45" height="45" alt="">
-            </a>
-            <button class="navbar-toggler navbar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#nvbCollapse" aria-controls="nvbCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse text-center" id="nvbCollapse">
-                <ul class="navbar-nav nav ms-auto">
-                    <li class="nav-item mx-2 my-2">
-                        <a class="nav-link" href="dashboard.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item mx-2 my-2">
-                        <a class="nav-link" href="category.php">Categories</a>
-                    </li>
-                    <li class="nav-item mx-2 my-1">
-                        <a class="nav-link" href="profile.php">
-                            <?= $_SESSION["username"]; ?>
-                            <img src=<?= "user_img/" . $_SESSION["id"] . $_SESSION["img"] ?> alt="Tes Foto User" class="rounded-circle" style="width: 32px;">
-                        </a>
-                    </li>
-                    <li class="nav-item mx-2 my-2">
-                        <a href="login_form.php"><button type="button" class="btn btn-outline-danger mr-2 px-3">Log Out</button></a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include_once './components/navbar.php' ?>
 
     <main>
-        <div class="container card profile-container d-flex flex-row mt-4 justify-content-evenly align-items-center">
-            <div class="profile-bio d-flex flex-column col-lg-3 ms-3 py-3 justify-content-center align-items-center">
-                <img src=<?= "user_img/" . $row["img"] ?> style="max-width: 10rem;" class="rounded-circle my-2">
-                <h3><?= $row["username"] ?></h3>
-                <span class="my-1"><?= $row["email"] ?></span>
+        <div class="container d-flex flex-row mb-4 justify-content-center">
+            <div class="container col-lg-3 card profile-container d-flex flex-column mt-4 mx-2 align-items-center justify-content-center" style="max-height: 25rem;">
+                <h4>Current Profile</h4>
+                <div class="profile-bio d-flex flex-column justify-content-center align-items-center ms-auto me-auto">
+                    <img src=<?= "user_img/" . $row["img"] ?> class="rounded-circle my-2" style="max-width: 10rem;">
+                    <h3><?= $row["username"] ?></h3>
+                    <span class="my-1"><?= $row["email"] ?></span>
+                </div>
             </div>
-            <div class="profile-posts-container flex-column col-lg-9 py-4 px-5">
-                <div class="pb-3">
-                    <form id="form-edit-account" action="edit_profile_proses.php" method="post" enctype="multipart/form-data">
-                        <div class="row form-group">
-                            <div class="col">
-                                <label for="username" class="form-label mt-4 mb-2"> Username </label>
-                                <input type="text" class="form-control" id="username" name="username" require />
-                                <label for="email" class="form-label mt-2 mb-2"> Email </label>
-                                <input type="email" class="form-control" id="email" name="email" require />
-                                <label for="password" class="form-label mt-2 mb-2"> Upload Profile Picture </label>
-                                <input type="file" class="form-control" id="img" name="img" require />
-                                <div class="button-container mt-3 mb-4">
-                                    <a href="edit_profile_proses.php"><button class="edit-profile btn btn-success my-2 p-2 me-1" style="max-width: 8rem;">Save Profile</button></a>
-                                    <a href="profile.php"><button class="edit-profile btn btn-danger my-2 p-2 px-3 me-1" style="max-width: 8rem;">Back</button></a>
+            <div class="container card profile-container d-flex flex-row justify-content-center mt-4 mx-2 col-lg-8">
+                <div class="profile-posts-container flex-column col-lg-9 py-2 px-5">
+                    <div class="pb-3">
+                        <form id="form-edit-account" action="edit_profile_proses.php" method="post" enctype="multipart/form-data">
+                            <div class="row form-group">
+                                <div class="col">
+                                    <label for="username" class="form-label mt-4 mb-2"> Username </label>
+                                    <input type="text" class="form-control" id="username" name="username" />
+                                    <label for="email" class="form-label mt-2 mb-2"> Email </label>
+                                    <input type="email" class="form-control" id="email" name="email" />
+                                    <label for="password" class="form-label mt-2 mb-2"> Upload Profile Picture </label>
+                                    <input type="file" class="form-control" id="img" name="img" />
+                                    <div class="button-container mt-3 mb-4 d-flex justify-content-center">
+                                        <a href="edit_profile_proses.php"><button class="edit-profile btn btn-success my-2 p-2 me-1" style="max-width: 8rem;">Save Profile</button></a>
+                                        <a href="profile.php"><button class="edit-profile btn btn-danger my-2 p-2 px-3 me-1" style="max-width: 8rem;">Back</button></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="profile-posts my-2 mb-3">
+                        </form>
+                    </div>
+                    <div class="profile-posts my-2 mb-3">
 
+                    </div>
                 </div>
             </div>
         </div>
