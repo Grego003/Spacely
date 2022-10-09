@@ -1,71 +1,84 @@
 <?php
 session_start();
 require 'db.php';
-global $db;
 
-if(isset($_POST['back'])) {
+$username = $email =
+    $img = $img_temp =
+    $file_ext = "";
+
+
+$id = $_SESSION["id"];
+$sql = "SELECT * FROM user
+WHERE id = ?";
+$stmt = $db->prepare($sql);
+$stmt->execute([$_SESSION["id"]]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (isset($_POST['back'])) {
     header('location: profile.php');
     return;
 }
 
-if (isset($_POST['username'])){
-    $sql = "UPDATE user 
-        SET username = ?
-        WHERE id = ?";
-    $stmt = $db->prepare($sql);
-    $data = [$_POST["username"], $_SESSION["id"]];
-    $stmt->execute($data);
-    $_SESSION["username"] = $_POST["username"];
-}
-if (isset($_POST['email'])){
-    $sql = "UPDATE user 
-        SET email = ?
-        WHERE id = ?";
-    $stmt = $db->prepare($sql);
-    $data = [$_POST["email"], $_SESSION["id"]];
-    $stmt->execute($data);
-    $_SESSION["email"] = $_POST["email"];
-}
-if (!empty($_FILES['img']["name"])){
-    $img = $_FILES["img"]["name"];
-    $img_temp = $_FILES["img"]['tmp_name'];
-    $file_ext = explode(".", $img);
-    $file_ext = end($file_ext);
-    $file_ext = strtolower($file_ext);
-    //check if database is empty
-    $sql = "SELECT img FROM user
-    WHERE id = ?";
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$_SESSION["id"]]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (check_img_type($file_ext)) {
-        if(file_exists("user_img/".$row['img'])) unlink("user_img/".$row['img']);
-        move_uploaded_file($img_temp, "user_img/{$_SESSION["id"]}.{$file_ext}");
-        $sql = "UPDATE user 
-        SET img = ?
-        WHERE id = ?";
-        $stmt = $db->prepare($sql);
-        $data = ["{$_SESSION["id"]}.{$file_ext}", $_SESSION["id"]];
-        $stmt->execute($data);
-    }
-}
-header('location: edit_profile.php');
+if (!empty($_POST["username"])) {
+    $username = $_POST["username"];
+    //$_SESSION["username"] = $username;
+} else $username = $row["username"];
 
+if (!empty($_POST["email"])) {
+    $email = $_POST["email"];
+} else $email = $row["email"];
+
+
+if (!empty($_FILES["img"]["name"])) {
+    $img = $_FILES["img"]["name"];
+    $img_temp = $_FILES["img"]["tmp_name"];
+    $file_ext = GetImgType($img);
+    if (check_img_type($file_ext)) {
+        if (file_exists("user_img/" . $row['img'])) unlink("user_img/" . $row['img']);
+        move_uploaded_file($img_temp, "user_img/{$id}{$file_ext}");
+        echo $img = $id . $file_ext;
+    } else {
+        header("location:edit_profile.php");
+    }
+} else $img = $row["img"];
+
+update_database($username, $email, $img, $id);
+$_SESSION["username"] = $username;
+$_SESSION["img"] = $img;
+//header('location:profile.php');
+
+function update_database($_username, $_email, $_img, $_id)
+{
+    global $db;
+    $sql = "UPDATE user SET username = ?, email = ?, img = ? WHERE id = ?";
+    $stmt = $db->prepare($sql);
+    $data = [$_username, $_email, $_img, $_id];
+    $stmt->execute($data);
+}
 
 function check_img_type($img_type)
 {
     switch ($img_type) {
-        case 'jpg':
-        case 'png':
-        case 'jpeg':
-        case 'svg':
-        case 'webp':
-        case 'bmp':
-        case 'gif':
+        case '.jpg':
+        case '.png':
+        case '.jpeg':
+        case '.svg':
+        case '.webp':
+        case '.bmp':
+        case '.gif':
             return true;
             break;
         default:
             $_SESSION['ERROR'] = "YOU CAN ONLY UPLOAD AN IMAGE FILE.";
             return false;
     }
+}
+
+function GetImgType($img)
+{
+    $file_ext = explode(".", $img);
+    $file_ext = end($file_ext);
+    $file_ext = strtolower($file_ext);
+    $file_ext = "." . $file_ext;
+    return $file_ext;
 }
