@@ -2,10 +2,6 @@
 session_start();
 //need login
 
-if (!isset($_SESSION["id"])) {
-	header("location: login_form.php");
-}
-
 require_once("security.php");
 
 $sql = "SELECT *,

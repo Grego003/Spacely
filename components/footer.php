@@ -29,11 +29,11 @@
                         <div class="footer-body card-body text-center d-flex flex-column">
                             <h5 class="footer-title card-title display-4" style="font-size:30px">Menus</h5>
 
-                            <a class="footer-menu text-light my-1" href="#"><i class="fa fa-home fa-fw mx-2"></i>Dashboard</a>
+                            <a class="footer-menu text-light my-1" href="dashboard.php"><i class="fa fa-home fa-fw mx-2"></i>Dashboard</a>
 
-                            <a class="footer-menu text-light my-1" href="#"><i class="fa fa-th-list fa-fw mx-2"></i>Categories</a>
+                            <a class="footer-menu text-light my-1" href="category.php"><i class="fa fa-th-list fa-fw mx-2"></i>Categories</a>
 
-                            <a class="footer-menu text-light my-1" href="#"><i class="fa fa-info-circle fa-fw mx-2"></i>Your Profile</a>
+                            <a class="footer-menu text-light my-1" href="profile.php"><i class="fa fa-info-circle fa-fw mx-2"></i>Your Profile</a>
 
                         </div>
                     </div>

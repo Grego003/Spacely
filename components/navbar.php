@@ -35,7 +35,7 @@
                     </li>
 
                     <li class="nav-item mx-2 my-2">
-                        <a href="login_form.php"><button type="button" class="btn btn-outline-danger mr-2 px-3">Log Out</button></a>
+                        <a href="logout.php"><button type="button" class="btn btn-outline-danger mr-2 px-3">Log Out</button></a>
                     </li>
                 <?php
                 }

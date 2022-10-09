@@ -1,79 +1,83 @@
 <?php
-include "security.php";
-date_default_timezone_set("Asia/Jakarta");
 session_start();
-if (isset($_POST["categories"]) && isset($_POST["title"]) && isset($_POST["body"])) {
-    $curr_date = date("y-m-d");
-    $curr_time = date("h");
-    $post_id = Get_PostID();
-    $user_id = $_SESSION["id"];
-    $forum_id = get_forumID($_POST["categories"]);
-    $title = $_POST["title"];
-    $body = $_POST["body"];
+require_once("security.php");
+var_dump($name);
 
-    echo $curr_date;
-    echo $curr_time;
-    echo $post_id;
-    echo $user_id;
-    echo $forum_id;
-    echo $title;
-    echo $body;
+if (
+    !empty($_POST["name"]) && !empty($_POST["username"]) && !empty($_POST["email"]) &&
+    !empty($_POST["password"]) && isset($_FILES['img'])
+) {
+    if (CheckValidString($_POST["email"])) {
+        $_SESSION['ERROR'] = "Invalid Email";
+        header('location: create_account_form.php');
+    }
+    if (CheckValidString($_POST["password"]) || CheckValidString($_POST['password2'])) {
+        if (CheckValidString($_POST["password"]) != CheckValidString($_POST['password2'])) {
+            $_SESSION['ERROR'] = "Password not match";
+            header('location: create_account_form.php');
+        }
+        $_SESSION['ERROR'] = "Password must be alphanumeric";
+        header('location: create_account_form.php');
+    }
+    if (CheckValidString($_POST["username"])) {
+        $_SESSION['ERROR'] = "username must be alphanumeric";
+        header('location: create_account_form.php');
+    }
+    if (CheckValidString($_POST["name"])) {
+        $_SESSION['ERROR'] = "name must be alphanumeric";
+        header('location: create_account_form.php');
+    }
+    $id = "U";
+    $name = $_POST["name"];
+    $username = $_POST["username"];
+    $email = $_POST["email"];
+    $encrypted = Encode($_POST["password"]);
+    $user_key = $encrypted['key'];
+    $encrypted_password = $encrypted['encoded'];
+    $img = $_FILES["img"]["name"];
+    $img_temp = $_FILES["img"]['tmp_name'];
+    $file_ext = explode(".", $img);
+    $file_ext = end($file_ext);
+    $file_ext = strtolower($file_ext);
 
-    insert_post_to_database($post_id, $user_id, $forum_id, $title, $body, $curr_time, $curr_date);
-    header("location: category.php");
+    //check if database is empty
+
+    if (check_img_type($file_ext)) {
+        // 0 = user, 1 = admin
+        $id = GetID(0);
+        move_uploaded_file($img_temp, "user_img/{$id}.{$file_ext}");
+        insert_to_database($id, $name, $username, $email, $user_key, $encrypted_password, "{$id}.{$file_ext}");
+        header('location: login_form.php');
+    }
+} else {
+    $_SESSION['ERROR'] = "All fields are required. Please fill all required fields and submit again.";
+    header('location: create_account_form.php');
 }
 
-function insert_post_to_database($_post_id, $_user_id, $_forum_id, $_title, $_body, $_time_created, $_date_created)
+
+function insert_to_database($_id, $_name, $_username, $_email, $_user_key, $_encrypted_password, $_img)
 {
-    $sql = "INSERT INTO post(id, user_id, forum_id, title, body, time_created, date_created, like_ammount, comment_ammount)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    global $blacklist;
+    $sql = "INSERT INTO user(id, name, username, email, user_key, encrypted_password, img)
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
     global $db;
     $stmt = $db->prepare($sql);
-    $data = [$_post_id, $_user_id, $_forum_id, $_title, $_body, $_time_created, $_date_created, 0, 0];
+    $_username = str_replace($blacklist, "", $_username);
+    $_email = str_replace($blacklist, "", $_email);
+    $data = [$_id, $_name, $_username, $_email, $_user_key, $_encrypted_password, $_img];
     $stmt->execute($data);
 }
 
-function Get_PostID()
+function GetID($type)
 {
     $id = 0;
-    $sql = "SELECT * FROM post";
+    $sql = "SELECT * FROM user";
     global $db;
     $hasil = $db->query($sql);
     while ($row = $hasil->fetch(PDO::FETCH_ASSOC)) {
-        $id = intval(substr($row['id'], 1));
+        $id = intval($row['id']);
     }
-    $re = strval("p");
+    $re = strval($type);
     $re .= str_pad(strval($id + 1), 4, '0', STR_PAD_LEFT);
     return $re;
-}
-
-function get_forumID($category)
-{
-    switch ($category) {
-        case "c++":
-            $forum_id = "F0001";
-            break;
-        case "python":
-            $forum_id = "F0002";
-            break;
-        case "java":
-            $forum_id = "F0003";
-            break;
-        case "ruby":
-            $forum_id = "F0004";
-            break;
-        case "sql":
-            $forum_id = "F0005";
-            break;
-        case "php":
-            $forum_id = "F0006";
-            break;
-        case "c":
-            $forum_id = "F0007";
-            break;
-        case "javascript":
-            $forum_id = "F0008";
-            break;
-    }
-    return $forum_id;
 }

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "NeedLogin.php";
 require "db.php";
 //user data
@@ -7,6 +8,17 @@ WHERE id = ?";
 $stmt = $db->prepare($sql);
 $stmt->execute([$_SESSION["id"]]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$incomplete_msg = "Please fill all required fields and submit again.";
+$alert_msg = $incomplete_msg;
+$style = "display:none;";
+if (!empty($_SESSION['ERROR'])) {
+    if ($_SESSION['ERROR'] != "") {
+        $alert_msg = $_SESSION['ERROR'];
+        $style = "display:block;";
+        $_SESSION['ERROR'] = "";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +45,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <body>
     <!-- navbar -->
-    <?php include_once './components/navbar.php' ?>
-
+    <?php include_once './components/navbar.php';?>
+    
     <main>
         <div class="container d-flex flex-row mb-4 justify-content-center">
             <div class="container col-lg-3 card profile-container d-flex flex-column mt-4 mx-2 align-items-center justify-content-center" style="max-height: 25rem;">
@@ -52,14 +64,17 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                             <div class="row form-group">
                                 <div class="col">
                                     <label for="username" class="form-label mt-4 mb-2"> Username </label>
-                                    <input type="text" class="form-control" id="username" name="username" />
+                                    <input type="text" class="form-control" id="username" name="username" 
+                                    value=<?php echo $_SESSION['username']?>>
                                     <label for="email" class="form-label mt-2 mb-2"> Email </label>
-                                    <input type="email" class="form-control" id="email" name="email" />
+                                    <input type="email" class="form-control" id="email" name="email" 
+                                    value=<?php echo $_SESSION['email']?>>
                                     <label for="password" class="form-label mt-2 mb-2"> Upload Profile Picture </label>
-                                    <input type="file" class="form-control" id="img" name="img" />
+                                    <label for="password" class="form-label mt-2 mb-2" style=<?php echo $style ?>> <?php echo $alert_msg ?> </label>
+                                    <input type="file" class="form-control" id="img" name="img" accept="image/*"/>
                                     <div class="button-container mt-3 mb-4 d-flex justify-content-center">
                                         <a href="edit_profile_proses.php"><button class="edit-profile btn btn-success my-2 p-2 me-1" style="max-width: 8rem;">Save Profile</button></a>
-                                        <a href="profile.php"><button class="edit-profile btn btn-danger my-2 p-2 px-3 me-1" style="max-width: 8rem;">Back</button></a>
+                                        <a href="profile.php"><button class="edit-profile btn btn-danger my-2 p-2 px-3 me-1" style="max-width: 8rem;" name="back" value="GO_BACK">Back</button></a>
                                     </div>
                                 </div>
                             </div>
